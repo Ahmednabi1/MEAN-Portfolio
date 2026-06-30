@@ -1,0 +1,37 @@
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><i class="fas fa-folder-open"></i> Manage Projects</h1>
+      <p class="page-subtitle">Add, edit, or remove your portfolio projects.</p>
+    </div>
+    <button class="add-btn" (click)="onAddNew()">
+      <i class="fas fa-plus"></i> Add Project
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="state-box">
+      <i class="fas fa-spinner fa-spin"></i> Loading projects...
+    </div>
+  } @else if (errorMessage) {
+    <div class="state-box error">
+      <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+    </div>
+  } @else {
+    <app-project-list
+      [projects]="projects"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
+    />
+  }
+
+  @if (showForm) {
+    <app-project-form
+      [project]="editingProject"
+      (saved)="onFormSaved($event)"
+      (cancelled)="onFormCancel()"
+    />
+  }
+
+</div>

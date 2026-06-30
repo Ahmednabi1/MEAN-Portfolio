@@ -1,0 +1,26 @@
+<section class="skills section">
+  <div class="container">
+
+    <div class="section-header">
+      <span class="section-label">Skills</span>
+      <h2 class="section-title">What I Work With</h2>
+    </div>
+
+    <div class="skills-grid">
+      @for (category of skillCategories; track category._id) {
+        <div class="skill-card">
+          <div class="skill-icon">
+            <i [class]="category.icon"></i>
+          </div>
+          <h3 class="skill-name">{{ category.name }}</h3>
+          <div class="skill-tags">
+            @for (tag of category.tags; track tag) {
+              <span class="skill-tag">{{ tag }}</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+</section>

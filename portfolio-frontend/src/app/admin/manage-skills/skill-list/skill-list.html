@@ -1,0 +1,38 @@
+@if (skills.length === 0) {
+  <div class="empty-state">
+    <i class="fas fa-code"></i>
+    <p>No skill categories yet. Click "Add Category" to get started.</p>
+  </div>
+} @else {
+  <div class="skills-grid">
+    @for (skill of skills; track skill._id) {
+      <div class="skill-card">
+
+        <div class="card-header">
+          <div class="icon-circle">
+            <i [class]="skill.icon"></i>
+          </div>
+          <div class="card-meta">
+            <h3 class="card-name">{{ skill.name }}</h3>
+            <span class="card-order">Order: {{ skill.order }}</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn edit" (click)="onEdit(skill)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-btn delete" (click)="onDelete(skill._id!)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="tags-row">
+          @for (tag of skill.tags; track tag) {
+            <span class="tag">{{ tag }}</span>
+          }
+        </div>
+
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,127 @@
+<section class="contact section">
+  <div class="container">
+
+    <div class="section-header">
+      <span class="section-label">Contact</span>
+      <h2 class="section-title">Get In Touch</h2>
+      <p class="section-desc">
+        Have a project in mind or just want to say hi? My inbox is always open.
+      </p>
+    </div>
+
+    <div class="contact-grid">
+
+      <!-- Info -->
+      <div class="contact-info">
+        @if (profile?.email) {
+          <a [href]="'mailto:' + profile!.email" class="contact-card">
+            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+            <div class="contact-text">
+              <span class="contact-label">Email</span>
+              <span class="contact-value">{{ profile!.email }}</span>
+            </div>
+          </a>
+        }
+        @if (profile?.phone) {
+          <a [href]="'tel:' + profile!.phone" class="contact-card">
+            <div class="contact-icon"><i class="fas fa-phone"></i></div>
+            <div class="contact-text">
+              <span class="contact-label">Phone</span>
+              <span class="contact-value">{{ profile!.phone }}</span>
+            </div>
+          </a>
+        }
+        @if (profile?.location) {
+          <div class="contact-card">
+            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="contact-text">
+              <span class="contact-label">Location</span>
+              <span class="contact-value">{{ profile!.location }}</span>
+            </div>
+          </div>
+        }
+        @if (profile?.linkedinUrl) {
+          <a [href]="profile!.linkedinUrl" target="_blank" class="contact-card">
+            <div class="contact-icon"><i class="fab fa-linkedin-in"></i></div>
+            <div class="contact-text">
+              <span class="contact-label">LinkedIn</span>
+              <span class="contact-value">Let's connect</span>
+            </div>
+          </a>
+        }
+        @if (profile?.githubUrl) {
+          <a [href]="profile!.githubUrl" target="_blank" class="contact-card">
+            <div class="contact-icon"><i class="fab fa-github"></i></div>
+            <div class="contact-text">
+              <span class="contact-label">GitHub</span>
+              <span class="contact-value">See my code</span>
+            </div>
+          </a>
+        }
+      </div>
+
+      <!-- Form -->
+      <div class="contact-form-wrapper">
+        @if (submitted) {
+          <div class="submitted-state">
+            <i class="fas fa-check-circle"></i>
+            <h3>Message Sent!</h3>
+            <p>Thanks for reaching out. I'll get back to you soon.</p>
+          </div>
+        } @else {
+          <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+
+            @if (errorMessage) {
+              <div class="form-error-banner">
+                <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+              </div>
+            }
+
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" formControlName="name" placeholder="Ahmed Nabil" />
+              @if (name.invalid && name.touched) {
+                <span class="field-error">Name is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Your Email</label>
+              <input type="email" formControlName="email" placeholder="you@example.com" />
+              @if (email.invalid && email.touched) {
+                @if (email.errors?.['required']) {
+                  <span class="field-error">Email is required.</span>
+                } @else if (email.errors?.['validEmail']) {
+                  <span class="field-error">Please enter a valid email.</span>
+                }
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Message</label>
+              <textarea formControlName="message" rows="5" placeholder="Hi, I'd like to..."></textarea>
+              @if (message.invalid && message.touched) {
+                @if (message.errors?.['required'] || message.errors?.['noWhitespace']) {
+                  <span class="field-error">Message is required.</span>
+                } @else if (message.errors?.['minLengthTrimmed']) {
+                  <span class="field-error">Message must be at least 10 characters.</span>
+                }
+              }
+            </div>
+
+            <button type="submit" class="send-btn" [disabled]="isSending">
+              @if (isSending) {
+                <i class="fas fa-spinner fa-spin"></i> Sending...
+              } @else {
+                <i class="fas fa-paper-plane"></i> Send Message
+              }
+            </button>
+
+          </form>
+        }
+      </div>
+
+    </div>
+
+  </div>
+</section>

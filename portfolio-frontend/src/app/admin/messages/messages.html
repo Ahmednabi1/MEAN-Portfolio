@@ -1,0 +1,95 @@
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">
+        <i class="fas fa-envelope"></i> Messages
+        @if (unreadCount() > 0) {
+          <span class="unread-badge">{{ unreadCount() }}</span>
+        }
+      </h1>
+      <p class="page-subtitle">Contact form submissions from visitors.</p>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="state-box">
+      <i class="fas fa-spinner fa-spin"></i> Loading messages...
+    </div>
+  } @else if (errorMessage) {
+    <div class="state-box error">
+      <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+    </div>
+  } @else if (messages.length === 0) {
+    <div class="empty-state">
+      <i class="fas fa-inbox"></i>
+      <p>No messages yet.</p>
+    </div>
+  } @else {
+    <div class="messages-layout">
+
+      <!-- List -->
+      <div class="message-list">
+        @for (msg of messages; track msg._id) {
+          <div
+            class="message-item"
+            [class.unread]="!msg.isRead"
+            [class.active]="selected?._id === msg._id"
+            (click)="open(msg)"
+          >
+            <div class="msg-avatar">
+              {{ msg.name.charAt(0).toUpperCase() }}
+            </div>
+            <div class="msg-preview">
+              <div class="msg-meta">
+                <span class="msg-name">{{ msg.name }}</span>
+                <span class="msg-date">{{ formatDate(msg.createdAt!) }}</span>
+              </div>
+              <p class="msg-email">{{ msg.email }}</p>
+              <p class="msg-snippet">{{ msg.message | slice:0:60 }}{{ msg.message.length > 60 ? '...' : '' }}</p>
+            </div>
+            @if (!msg.isRead) {
+              <div class="unread-dot"></div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Detail -->
+      <div class="message-detail">
+        @if (selected) {
+          <div class="detail-header">
+            <div class="detail-avatar">
+              {{ selected.name.charAt(0).toUpperCase() }}
+            </div>
+            <div class="detail-info">
+              <h3>{{ selected.name }}</h3>
+              <a [href]="'mailto:' + selected.email" class="detail-email">
+                {{ selected.email }}
+              </a>
+              <span class="detail-date">{{ formatDate(selected.createdAt!) }}</span>
+            </div>
+            <button class="delete-btn" (click)="delete(selected._id!)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+          <div class="detail-body">
+            <p>{{ selected.message }}</p>
+          </div>
+          <div class="detail-actions">
+            <a [href]="'mailto:' + selected.email" class="reply-btn">
+              <i class="fas fa-reply"></i> Reply via Email
+            </a>
+          </div>
+        } @else {
+          <div class="detail-empty">
+            <i class="fas fa-envelope-open"></i>
+            <p>Select a message to read it.</p>
+          </div>
+        }
+      </div>
+
+    </div>
+  }
+
+</div>

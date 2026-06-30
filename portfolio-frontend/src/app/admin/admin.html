@@ -1,0 +1,8 @@
+<div class="admin-layout" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <app-sidebar (toggleCollapse)="onSidebarToggle($event)" />
+  <main class="admin-main">
+    <router-outlet />
+  </main>
+</div>
+
+<app-toast />

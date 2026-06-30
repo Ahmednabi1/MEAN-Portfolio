@@ -1,0 +1,16 @@
+<section class="projects section">
+  <div class="container">
+
+    <div class="section-header">
+      <span class="section-label">Projects</span>
+      <h2 class="section-title">What I've Built</h2>
+    </div>
+
+    <div class="projects-grid">
+      @for (project of projects; track project._id) {
+        <app-project-card [project]="project" />
+      }
+    </div>
+
+  </div>
+</section>

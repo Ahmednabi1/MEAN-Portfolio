@@ -1,0 +1,37 @@
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><i class="fas fa-briefcase"></i> Manage Experience</h1>
+      <p class="page-subtitle">Add, edit, or remove your work experience entries.</p>
+    </div>
+    <button class="add-btn" (click)="onAddNew()">
+      <i class="fas fa-plus"></i> Add Experience
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="state-box">
+      <i class="fas fa-spinner fa-spin"></i> Loading experience...
+    </div>
+  } @else if (errorMessage) {
+    <div class="state-box error">
+      <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+    </div>
+  } @else {
+    <app-experience-list
+      [experiences]="experiences"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
+    />
+  }
+
+  @if (showForm) {
+    <app-experience-form
+      [experience]="editingExperience"
+      (saved)="onFormSaved($event)"
+      (cancelled)="onFormCancel()"
+    />
+  }
+
+</div>

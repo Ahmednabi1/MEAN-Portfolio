@@ -1,0 +1,37 @@
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><i class="fas fa-code"></i> Manage Skills</h1>
+      <p class="page-subtitle">Organize your skill categories and tags.</p>
+    </div>
+    <button class="add-btn" (click)="onAddNew()">
+      <i class="fas fa-plus"></i> Add Category
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="state-box">
+      <i class="fas fa-spinner fa-spin"></i> Loading skills...
+    </div>
+  } @else if (errorMessage) {
+    <div class="state-box error">
+      <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+    </div>
+  } @else {
+    <app-skill-list
+      [skills]="skills"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
+    />
+  }
+
+  @if (showForm) {
+    <app-skill-form
+      [skill]="editingSkill"
+      (saved)="onFormSaved($event)"
+      (cancelled)="onFormCancel()"
+    />
+  }
+
+</div>

@@ -1,0 +1,141 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2>{{ project ? 'Edit Project' : 'Add Project' }}</h2>
+      <button class="close-btn" (click)="onCancel()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      @if (errorMessage) {
+      <div class="alert-error">
+        <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+      </div>
+      }
+
+      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+
+        <div class="section">
+          <h3 class="section-title">Basic Info</h3>
+          <div class="form-grid">
+
+            <div class="form-group span-2">
+              <label>Title <span class="required">*</span></label>
+              <input type="text" formControlName="title" placeholder="Project name" />
+              @if (title.invalid && title.touched) {
+              @if (title.errors?.['required'] || title.errors?.['noWhitespace']) {
+              <span class="field-error">Title is required.</span>
+              } @else if (title.errors?.['minLengthTrimmed']) {
+              <span class="field-error">Title must be at least 2 characters.</span>
+              }
+              }
+            </div>
+
+            <div class="form-group span-2">
+              <label>Description <span class="required">*</span></label>
+              <textarea formControlName="description" rows="4" placeholder="Describe the project..."></textarea>
+              @if (description.invalid && description.touched) {
+              @if (description.errors?.['required'] || description.errors?.['noWhitespace']) {
+              <span class="field-error">Description is required.</span>
+              } @else if (description.errors?.['minLengthTrimmed']) {
+              <span class="field-error">Description must be at least 10 characters.</span>
+              }
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Badge</label>
+              <input type="text" formControlName="badge" placeholder="e.g. Award-winning" />
+            </div>
+
+            <div class="form-group">
+              <label>Order</label>
+              <input type="number" formControlName="order" placeholder="0" />
+              @if (projectForm.get('order')?.errors?.['positiveNumber'] && projectForm.get('order')?.touched) {
+              <span class="field-error">Order must be 0 or greater.</span>
+              }
+            </div>
+
+            <div class="form-group span-2">
+              <label>Tech Stack</label>
+              <p class="field-hint">Comma separated — e.g. Node.js, MongoDB, React</p>
+              <input type="text" formControlName="techStackText" placeholder="Node.js, Express, MongoDB" />
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div class="section">
+          <div class="section-header">
+            <h3 class="section-title">Links</h3>
+            <button type="button" class="small-btn" (click)="addLink()">
+              <i class="fas fa-plus"></i> Add Link
+            </button>
+          </div>
+          @if (links.length === 0) {
+          <p class="empty-hint">No links added yet.</p>
+          }
+          @for (link of links; track $index) {
+          <div class="link-row">
+            <input type="text" [value]="link.label" (input)="link.label = $any($event.target).value"
+              placeholder="Label (e.g. GitHub)" />
+            <input type="url" [value]="link.url" (input)="link.url = $any($event.target).value"
+              placeholder="https://..." />
+            <button type="button" class="remove-btn" (click)="removeLink($index)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+          }
+        </div>
+
+        <!-- Images -->
+        <div class="section">
+          <div class="section-header">
+            <h3 class="section-title">Images</h3>
+            <label class="small-btn" for="projectImages">
+              <i class="fas fa-upload"></i> Upload
+            </label>
+            <input id="projectImages" type="file" accept="image/*" multiple (change)="onFilesChange($event)" hidden />
+          </div>
+          <p class="field-hint">First image is used as the cover.</p>
+          <div class="images-grid">
+            @for (img of existingImages; track img) {
+            <div class="img-thumb">
+              <img [src]="BASE + img" alt="existing" />
+              <button type="button" class="remove-thumb" (click)="removeExistingImage($index)">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            }
+            @for (preview of newPreviews; track $index) {
+            <div class="img-thumb new">
+              <img [src]="preview" alt="new" />
+              <button type="button" class="remove-thumb" (click)="removeNewImage($index)">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            }
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+          <button type="submit" class="save-btn" [disabled]="isSaving">
+            @if (isSaving) {
+            <i class="fas fa-spinner fa-spin"></i> Saving...
+            } @else {
+            <i class="fas fa-save"></i> {{ project ? 'Update' : 'Create' }}
+            }
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+</div>

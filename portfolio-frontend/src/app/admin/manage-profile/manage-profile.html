@@ -1,0 +1,25 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">
+      <i class="fas fa-user"></i> Manage Profile
+    </h1>
+    <p class="page-subtitle">Update your personal info, bio, and resume links.</p>
+  </div>
+
+  @if (isLoading) {
+    <div class="state-box">
+      <i class="fas fa-spinner fa-spin"></i>
+      <span>Loading profile...</span>
+    </div>
+  } @else if (errorMessage) {
+    <div class="state-box error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+  } @else {
+    <app-profile-form
+      [profile]="profile"
+      (profileSaved)="onProfileSaved($event)"
+    />
+  }
+</div>

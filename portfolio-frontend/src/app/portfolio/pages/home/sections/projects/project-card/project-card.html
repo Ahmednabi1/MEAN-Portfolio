@@ -1,0 +1,93 @@
+<div class="card">
+
+  <!-- ── Image Slider ─────────────────────────────────── -->
+  <div class="card-cover">
+
+    @if (images.length > 0) {
+      <div class="slider">
+        <div
+          class="slider-track"
+          [style.transform]="'translateX(-' + currentIndex * 100 + '%)'"
+        >
+          @for (img of images; track img) {
+            <div class="slide">
+              <img [src]="BASE + img" [alt]="project.title" />
+            </div>
+          }
+        </div>
+
+        <!-- Arrows — only if more than one image -->
+        @if (hasMultiple) {
+          <button class="slider-btn prev" (click)="prev($event)" aria-label="Previous">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="slider-btn next" (click)="next($event)" aria-label="Next">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+
+          <!-- Dots -->
+          <div class="slider-dots">
+            @for (img of images; track img; let i = $index) {
+              <button
+                class="dot"
+                [class.active]="i === currentIndex"
+                (click)="goTo(i, $event)"
+                [aria-label]="'Go to image ' + (i + 1)"
+              ></button>
+            }
+          </div>
+        }
+
+        <!-- Image counter -->
+        @if (hasMultiple) {
+          <div class="image-counter">
+            {{ currentIndex + 1 }} / {{ images.length }}
+          </div>
+        }
+      </div>
+
+    } @else {
+      <div class="cover-placeholder">
+        <i class="fas fa-code"></i>
+      </div>
+    }
+
+    @if (project.badge) {
+      <span class="badge">{{ project.badge }}</span>
+    }
+
+  </div>
+
+  <!-- ── Body ───────────────────────────────────────────── -->
+  <div class="card-body">
+    <h3 class="card-title">{{ project.title }}</h3>
+    <p class="card-desc">{{ project.description }}</p>
+
+    @if (project.techStack.length) {
+      <div class="tech-tags">
+        @for (tech of project.techStack; track tech) {
+          <span class="tech-tag">{{ tech }}</span>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- ── Links ──────────────────────────────────────────── -->
+  @if (project.links.length) {
+    <div class="card-links">
+      @for (link of project.links; track link.url) {
+        <a [href]="link.url" target="_blank" class="project-link">
+          @if (link.label.toLowerCase().includes('github')) {
+            <i class="fab fa-github"></i>
+          } @else if (link.label.toLowerCase().includes('demo') || link.label.toLowerCase().includes('live')) {
+            <i class="fas fa-external-link-alt"></i>
+          } @else {
+            <i class="fas fa-link"></i>
+          }
+          {{ link.label }}
+        </a>
+      }
+    </div>
+  }
+
+</div>

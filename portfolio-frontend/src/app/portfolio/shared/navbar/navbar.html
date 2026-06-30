@@ -1,0 +1,36 @@
+<nav class="navbar">
+  <div class="nav-container">
+
+    <a class="nav-brand" (click)="scrollTo('#hero')">
+      {{ fullName }}
+    </a>
+
+    <!-- Desktop Links -->
+    <ul class="nav-links">
+      @for (link of navLinks; track link.href) {
+        <li>
+          <a class="nav-link" (click)="scrollTo(link.href)">
+            {{ link.label }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    <!-- Mobile Toggle -->
+    <button class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
+      <i [class]="isMenuOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
+    </button>
+
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (isMenuOpen) {
+    <div class="mobile-menu">
+      @for (link of navLinks; track link.href) {
+        <a class="mobile-link" (click)="scrollTo(link.href)">
+          {{ link.label }}
+        </a>
+      }
+    </div>
+  }
+</nav>

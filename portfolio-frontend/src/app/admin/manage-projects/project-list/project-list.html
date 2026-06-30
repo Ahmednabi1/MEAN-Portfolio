@@ -1,0 +1,56 @@
+@if (projects.length === 0) {
+  <div class="empty-state">
+    <i class="fas fa-folder-open"></i>
+    <p>No projects yet. Click "Add Project" to get started.</p>
+  </div>
+} @else {
+  <div class="project-grid">
+    @for (project of projects; track project._id) {
+      <div class="project-card">
+
+        <!-- Cover Image -->
+        <div class="card-cover">
+          @if (getCoverImage(project)) {
+            <img [src]="getCoverImage(project)!" alt="project.title" />
+          } @else {
+            <div class="cover-placeholder">
+              <i class="fas fa-image"></i>
+            </div>
+          }
+          @if (project.badge) {
+            <span class="badge">{{ project.badge }}</span>
+          }
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+          <h3 class="card-title">{{ project.title }}</h3>
+          <p class="card-desc">{{ project.description | slice:0:100 }}{{ project.description.length > 100 ? '...' : '' }}</p>
+
+          <!-- Tech Stack -->
+          @if (project.techStack.length) {
+            <div class="tech-tags">
+              @for (tech of project.techStack.slice(0, 4); track tech) {
+                <span class="tech-tag">{{ tech }}</span>
+              }
+              @if (project.techStack.length > 4) {
+                <span class="tech-tag muted">+{{ project.techStack.length - 4 }}</span>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Actions -->
+        <div class="card-actions">
+          <button class="action-btn edit" (click)="onEdit(project)">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="action-btn delete" (click)="onDelete(project._id!)">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+
+      </div>
+    }
+  </div>
+}

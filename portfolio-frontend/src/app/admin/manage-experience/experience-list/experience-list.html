@@ -1,0 +1,43 @@
+@if (experiences.length === 0) {
+  <div class="empty-state">
+    <i class="fas fa-briefcase"></i>
+    <p>No experience entries yet. Click "Add Experience" to get started.</p>
+  </div>
+} @else {
+  <div class="experience-list">
+    @for (exp of experiences; track exp._id) {
+      <div class="exp-card">
+
+        <div class="exp-left">
+          <div class="exp-icon">
+            <i class="fas fa-briefcase"></i>
+          </div>
+        </div>
+
+        <div class="exp-body">
+          <div class="exp-header">
+            <div>
+              <h3 class="exp-role">{{ exp.role }}</h3>
+              <p class="exp-company">
+                <i class="fas fa-building"></i> {{ exp.company }}
+              </p>
+            </div>
+            <span class="exp-date">{{ exp.dateRange }}</span>
+          </div>
+          <p class="exp-description">{{ exp.description }}</p>
+          <div class="exp-order">Order: {{ exp.order }}</div>
+        </div>
+
+        <div class="exp-actions">
+          <button class="action-btn edit" (click)="onEdit(exp)">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="action-btn delete" (click)="onDelete(exp._id!)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+
+      </div>
+    }
+  </div>
+}

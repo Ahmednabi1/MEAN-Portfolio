@@ -1,0 +1,90 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2>{{ skill ? 'Edit Skill Category' : 'Add Skill Category' }}</h2>
+      <button class="close-btn" (click)="onCancel()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      @if (errorMessage) {
+        <div class="alert-error">
+          <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+        </div>
+      }
+
+      <form [formGroup]="skillForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+
+          <div class="form-group span-2">
+            <label>Category Name <span class="required">*</span></label>
+            <input type="text" formControlName="name" placeholder="e.g. Backend Development" />
+            @if (name.invalid && name.touched) {
+              @if (name.errors?.['required'] || name.errors?.['noWhitespace']) {
+                <span class="field-error">Category name is required.</span>
+              } @else if (name.errors?.['minLengthTrimmed']) {
+                <span class="field-error">Name must be at least 2 characters.</span>
+              }
+            }
+          </div>
+
+          <div class="form-group span-2">
+            <label>Tags</label>
+            <p class="field-hint">Comma separated — e.g. Node.js, Express, MongoDB</p>
+            <input type="text" formControlName="tagsText" placeholder="Node.js, NestJS, PostgreSQL" />
+          </div>
+
+          <div class="form-group">
+            <label>Order</label>
+            <input type="number" formControlName="order" placeholder="0" />
+            @if (skillForm.get('order')?.errors?.['positiveNumber'] && skillForm.get('order')?.touched) {
+              <span class="field-error">Order must be 0 or greater.</span>
+            }
+          </div>
+
+          <div class="form-group span-2">
+            <label>Icon</label>
+            <p class="field-hint">Pick one below or type any Font Awesome class.</p>
+            <div class="icon-grid">
+              @for (suggestion of iconSuggestions; track suggestion.value) {
+                <button
+                  type="button"
+                  class="icon-option"
+                  [class.selected]="icon.value === suggestion.value"
+                  (click)="selectIcon(suggestion.value)"
+                  [title]="suggestion.label"
+                >
+                  <i [class]="suggestion.value"></i>
+                  <span>{{ suggestion.label }}</span>
+                </button>
+              }
+            </div>
+            <input type="text" formControlName="icon" placeholder="fas fa-code" style="margin-top: 0.75rem;" />
+            <div class="icon-preview">
+              <i [class]="icon.value"></i>
+              <span>Preview</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+          <button type="submit" class="save-btn" [disabled]="isSaving">
+            @if (isSaving) {
+              <i class="fas fa-spinner fa-spin"></i> Saving...
+            } @else {
+              <i class="fas fa-save"></i> {{ skill ? 'Update' : 'Create' }}
+            }
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+</div>
